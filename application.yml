@@ -27,4 +27,9 @@ management: # Actuator 허용 EndPoint 정의
       prometheus:
         enabled: true
     tags:
-      application: ${spring.application.name}    
+      application: ${spring.application.name}
+spring:
+  config:
+    messages:
+      basename: lang/messages
+      encoding: UTF-8

@@ -1,0 +1,26 @@
+server:
+  port: 8761
+spring:
+  config:
+    activate:
+      on-profile: local
+  cloud:
+    bus:
+      enabled: true
+      refresh:
+        enabled: true
+      env:
+        enabled: true
+    config:
+      retry:
+        initial-interval: 10000
+        max-attempts: 20
+        max-interval: 15000
+        multiplier: 1.1
+  security:
+    user:
+      name: admin
+      password: admin
+eureka:
+  server:
+    response-cache-update-interval-ms: 5000

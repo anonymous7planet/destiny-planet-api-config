@@ -1,0 +1,57 @@
+spring:
+  config:
+    activate:
+      on-profile: local-variable
+file:
+  upload:
+    temp-path: C:/Develop/anonymous_planet/${spring.application.name}/upload/tmp 
+    profile:
+      path: C:/Develop/anonymous_planet/${spring.application.name}/upload/profile
+      allow-extension: jpg,png,jpeg
+      file-min-count: 1
+      file-max-count: 5
+      file-total-size: 50
+    product-review:
+      path: C:/Develop/anonymous_planet/${spring.application.name}/upload/product_review
+      allow-extension: jpg,png,jpeg
+      file-min-count: 0
+      file-max-count: 10
+      file-total-size: 100
+---
+spring:
+  config:
+    activate:
+      on-profile: dev-variable
+file:
+  upload:
+    profile:
+      path: C:/Develop/anonymous_planet/${spring.application.name}/upload/profile
+      allow-extension: jpg,png,jpeg
+      file-min-count: 1
+      file-max-count: 5
+      file-total-size: 50
+    product-review:
+      path: C:/Develop/anonymous_planet/${spring.application.name}/upload/product_review
+      allow-extension: jpg,png,jpeg
+      file-min-count: 0
+      file-max-count: 10
+      file-total-size: 100
+---
+spring:
+  config:
+    activate:
+      on-profile: prod-variable
+file:
+  upload:
+    profile:
+      path: C:/Develop/anonymous_planet/${spring.application.name}/upload/profile
+      allow-extension: jpg,png,jpeg
+      file-min-count: 1
+      file-max-count: 5
+      file-total-size: 50
+    product-review:
+      path: C:/Develop/anonymous_planet/${spring.application.name}/upload/product_review
+      allow-extension: jpg,png,jpeg
+      file-min-count: 0
+      file-max-count: 10
+      file-total-size: 100

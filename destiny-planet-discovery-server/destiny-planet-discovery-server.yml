@@ -1,0 +1,27 @@
+spring:
+  profiles:
+    group:
+      default:
+        - local
+      local:
+        - local
+      dev:
+        - dev
+      prod:
+        - prod
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER_HOST_NAME:127.0.0.1}:${KAFKA_SERVER_PORT:9092}
+eureka:
+  client:
+    # eureka에 등록 여부를 정한다. 이 서버는 본인 자신이기에 등록하지 않는다.
+    register-with-eureka: false
+    # registry의 항목을 로컬로 캐시할것인지 정한다.
+    # client서비스가 eureka 서버로 부터 서비스 리스트 정보를 local에 cache할지 여부
+    fetch-registry: false
+    instance:
+      hostname: ${EUREKA_SERVER_HOST_NAME:localhost}
+      port: ${server.port}
+      user:
+        name: ${spring.security.user.name}
+        password: ${spring.security.user.password}
+  renewalPercentThreshold: 0.85

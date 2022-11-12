@@ -1,0 +1,70 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  cloud:
+    bus:
+      enabled: true
+      refresh:
+        enabled: true
+      env:
+        enabled: true
+    config:
+      retry:
+        initial-interval: 10000
+        max-attempts: 20
+        max-interval: 15000
+        multiplier: 1.1
+  datasource: # datasource 설정
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      connection-timeout: 20000 # 풀에서 커넥션을 구할 때 대기 시간,대기 시간 안에 구하지 못하면 Exception 발생(minimum : 250, default : 30000)
+      validation-timeout: 5000  # 커넥션이 유효한지 검사할 때 대기 시간을 지정, 이 값은 connection-timeout보다 작아야함(minimum : 250, default : 50000)
+      #idle-timeout: 300000       # 커넥션이 풀에서 유휴 상태로 남을 수 있는 최대 시간
+      max-lifetime: 1200000      # 커넥션의 최대 유지 시간을 설정
+      minimum-idle: 12
+      auto-commit: true
+      connection-test-query: SELECT 1
+  cache:
+    type: redis
+  redis:
+    host: localhost
+    port: 6379
+  servlet:
+    # 파일 업로드 설정
+    multipart:
+      max-file-size: 100MB       # 업로드 가능한 최대 파일 크기 Default:1MB
+      max-request-size: 100MB    # 업로드 가능한 총 요청 크기 Default:10MB
+      location: /sample           # 파일 업로드시 임시로 저장하는 절대 경로
+  thymeleaf: #메일에 사용될 html템플릿 파일 경로
+    prefix: file:///C:/Develop/anonymous_planet/${spring.application.name}/html/
+  mail:
+    default-sender: ENC(Q5OvCm5c0zLY0CfoBXPKhKaVpsi5+OFt4eE8+4bM1Ms=)
+    default-username: PLANET
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    port: 587
+    username: ENC(Q5OvCm5c0zLY0CfoBXPKhKaVpsi5+OFt4eE8+4bM1Ms=)
+    password: ENC(8h4Vhu+7ejtfFJE9LigftRdXcz4LHBBiR0ANNhaHq9E=)
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: true
+      mime:
+        charset: UTF-8
+      transport:
+        protocol: smtp
+planet:
+  datasource:
+    username: ENC(Ic5GDdAnycFpcvxUfsWLSgnhJeTlBBVC)
+    password: ENC(mQbRCF7BSam9tEntOPJedQ==)
+    jdbc-url: ENC(LDgNPjlLOj9qaLqV+etdSXRICc9QrNYB5d6lT84IkPuwZb6I2chhWWmb1o/PLXDRMM4xbVE7+AKy6mBQjuBUy7T016SnzGvHxoYEuPDkzDjfv9SXZJ7EF6h8DcY0xtcSQWFiExtCgjalCVPdKN9V3cv+TwjXIh/Vi2Sr7S8mIzF0tQSE9ft0ZjVEUqKEi8RpyS5nRMZF7IPhxnvhPnaKCrK6NrjW54pW)
+jwt:
+  secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK
+logging:
+  file:
+    path: /logs/
+    name: anonymous_planet_out_log

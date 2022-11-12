@@ -1,0 +1,72 @@
+server:
+  port: 8080
+spring:
+  profiles:
+    group:
+      default:
+        - local
+      local:
+        - local
+      dev:
+        - dev
+      prod:
+        - prod
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER_HOST_NAME:127.0.0.1}:${KAFKA_SERVER_PORT:9092}
+  cloud:
+    gateway:
+      default-filters: # Spring Cloud Gateway 공통 Filter
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway GlobalFilter
+            preLogger: true
+            postLogger: true
+      routes: # 라우팅할 마이크로 서비스
+        - id: auth-service
+          uri: lb://DESTINY-PLANET-AUTH-SERVICE
+          predicates: # 로그인, 회원가입, 중복확인, 비밀번호 재설정
+            # - Path=/auth/v1/api/token/**,/auth/*/*/auth/members/**,/auth/*/api/admin/auth/members/**
+            - Path=/auth/v1/api/admin/member/login,/auth/v1/api/admin/member/join-request,/auth/v1/api/admin/member/join,/auth/v1/api/member/login,/auth/v1/api/member/join,
+          filters:
+            - RewritePath=/auth/(?<path>.*),/$\{path}
+        - id: auth-service
+          uri: lb://DESTINY-PLANET-AUTH-SERVICE
+          predicates:
+            - Path=/auth/**
+          filters:
+            - RewritePath=/auth/(?<path>.*),/$\{path}
+            - JwtAuthenticationGatewayFilter
+        - id: member-service
+          # uri: http://localhost:8082/
+          uri: lb://DESTINY-PLANET-MEMBER-SERVICE #Eureka서버에 등록된 서비스 이름
+          predicates: # 조건
+            - Path=/member/**
+          filters: # 들어오는 요청과 응답, Request, Response를 특정 필터를 타게 함으로 우리가 원하는 방식으로 요청을 보내거나 헤더를 조작할 수 있고, 해당 필터를 이용해서 로그 파일을 작성하게 할수 도 있다.
+            # 요청 예시 http://localhost:8082/member/members로 요청을 하면 Member서비스에서 /members로 요청이 간다.
+            - RewritePath=/member/(?<path>.*),/$\{path}
+            - JwtAuthenticationGatewayFilter
+        - id: admin-service
+          uri: lb://DESTINY-PLANET-ADMIN-SERVICE
+          predicates:
+            - Path=/admin/**
+          filters:
+            - RewritePath=/admin/(?<path>.*),/$\{path}
+      globalcors: #CORS설정
+        cors-configurations:
+          "[/**]":
+            allowedOrigins: ["http://localhost:3000"]
+            allow-credentials: true
+            allowedHeaders: "*"
+            allowedMethods: ["POST", "GET", "PATCH", "PUT", "DELETE", "OPTIONS"]
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eurekka: true
+    instance:
+      hostname: ${EUREKA_SERVER_HOST_NAME:localhost}
+      port: ${EUREKA_SERVER_PORT:8761}
+      user:
+        name: admin
+        password: admin
+security:
+  enable-csrf: false

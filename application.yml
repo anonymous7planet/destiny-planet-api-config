@@ -1,0 +1,30 @@
+# 해당 config Server를 사용하는 Client에 모두 공통적으로 적용하고 싶은것들 정의
+server:
+  shutdown: graceful
+eureka:
+  client:
+    service-url:
+      defaultZone: ${eureka.client.instance.user.protocol:http}://${eureka.client.instance.user.name:admin}:${eureka.client.instance.user.password:admin}@${eureka.client.instance.hostname:localhost}:${eureka.client.instance.port:8761}/eureka/
+    registry-fetch-interval-seconds: 10 # 서비스 목록 캐싱(default : 30초)
+    disable-delta: true # 캐싱할 때 변경된 부분만 업데이트
+management: # Actuator 허용 EndPoint 정의
+  endpoints:
+    web:
+      exposure:
+        include: health,busrefresh,refresh,httptrace,shutdown,gateway,prometheus,metrics
+      base-path: /destiny-planet/manage
+  endpoint:
+    refresh:
+      enabled: true
+    gateway: #Gateway Endpoint 활성화
+      enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}    

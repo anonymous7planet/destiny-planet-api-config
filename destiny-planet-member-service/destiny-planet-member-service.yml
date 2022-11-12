@@ -1,0 +1,60 @@
+spring:
+  config:
+    import: planet-member-service-variable.yml
+  profiles:
+    group:
+      default:
+        - local
+        - local-variable
+      local:
+        - local
+        - local-variable
+      dev:
+        - dev
+        - dev-variable
+      prod:
+        - prod
+        - prod-variable
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVER_HOST_NAME:127.0.0.1}:${KAFKA_SERVER_PORT:9092}
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true # SQL문 로그 이쁘게 출력
+        show_sql: true
+    generate-ddl: false
+    database: mysql
+    open-in-view : false
+    hibernate:
+      ddl-auto : validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  thymeleaf:
+    suffix: .html
+    mode : HTML
+    encoding: UTF-8
+    check-template-location: true
+    cache: false
+  mvc: # 404에러를 CommonExceptionHandler에서 Catch해서 처리하기 위한 설정
+    throw-exception-if-no-handler-found: true
+  web: # 404에러를 CommonExceptionHandler에서 Catch해서 처리하기 위한 설정
+    resources:
+      add-mappings: false
+server:
+  port: 8082
+  error:
+    whitelabel:
+      enabled: false
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eurekka: true
+    instance:
+      hostname: ${EUREKA_SERVER_HOST_NAME:localhost}
+      port: ${EUREKA_SERVER_PORT:8761}
+      user:
+        name: admin
+        password: admin
